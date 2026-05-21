@@ -1,9 +1,9 @@
 package com.waver.avro.cli;
 
-import com.waver.avro.AvroChecks;
-import com.waver.avro.AvroCompatibilityChecker;
-import com.waver.avro.CompatibilityLevel;
-import com.waver.avro.MigrationAdvice;
+import com.waver.avro.advice.MigrationAdvice;
+import com.waver.avro.checker.AvroCompatibilityChecker;
+import com.waver.avro.checker.CompatibilityLevel;
+import com.waver.avro.schema.AvroChecks;
 import org.apache.avro.Schema;
 
 import java.io.IOException;

@@ -1,5 +1,6 @@
 package com.waver.avro;
 
+import com.waver.avro.schema.AvroChecks;
 import org.apache.avro.Schema;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,11 @@
 package com.waver.avro;
 
+import com.waver.avro.advice.MigrationAdvice;
+import com.waver.avro.advice.MigrationAdvisor;
+import com.waver.avro.checker.AvroCompatibilityChecker;
+import com.waver.avro.checker.CompatibilityLevel;
+import com.waver.avro.checker.CompatibilityResult;
+import com.waver.avro.schema.AvroChecks;
 import org.apache.avro.Schema;
 import org.junit.jupiter.api.Test;
 

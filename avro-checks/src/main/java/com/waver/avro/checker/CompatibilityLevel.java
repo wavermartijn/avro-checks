@@ -1,4 +1,4 @@
-package com.waver.avro;
+package com.waver.avro.checker;
 
 public enum CompatibilityLevel {
     NONE,

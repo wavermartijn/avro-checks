@@ -1,4 +1,6 @@
-package com.waver.avro;
+package com.waver.avro.advice;
+
+import com.waver.avro.checker.CompatibilityLevel;
 
 import java.util.List;
 
@@ -7,8 +9,8 @@ import java.util.List;
  * incompatibility message and the compatibility level that was violated.
  *
  * <p>The advisor pattern-matches on the incompatibility message text
- * produced by {@link AvroCompatibilityChecker} to recognise the root cause
- * and generate targeted steps.
+ * produced by {@link com.waver.avro.checker.AvroCompatibilityChecker} to recognise
+ * the root cause and generate targeted steps.
  */
 public final class MigrationAdvisor {
 
@@ -17,7 +19,7 @@ public final class MigrationAdvisor {
     /**
      * Returns a {@link MigrationAdvice} for the given incompatibility message.
      *
-     * @param incompatibility the raw message from {@link AvroCompatibilityChecker#check}
+     * @param incompatibility the raw message from {@link com.waver.avro.checker.AvroCompatibilityChecker#check}
      * @param level           the compatibility level that was being checked
      * @return advice with concrete migration steps
      */
