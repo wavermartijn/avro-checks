@@ -34,33 +34,67 @@ echo "[2/3] Building native image with Quarkus..."
 echo "This may take several minutes..."
 echo ""
 
-# Use direct java invocation to avoid gradlew script issues
-$JAVA_HOME/bin/java -cp ../gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain :avro-checks-quarkus-cli:nativeImage -Dquarkus.package.type=native -x test --no-daemon
-
+# Try native image build
+echo "Attempting native image build..."
+echo "Note: Apache Avro uses reflection which may cause native build to fail."
+echo "If this fails, a JAR will be created instead."
 echo ""
-echo "[3/3] Verifying native executable..."
 
-# Determine executable extension based on OS
-if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
-    EXECUTABLE="build/avro-checks-quarkus-cli-0.0.1-RC1-runner.exe"
-else
-    EXECUTABLE="build/avro-checks-quarkus-cli-0.0.1-RC1-runner"
+if $JAVA_HOME/bin/java -cp ../gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain :avro-checks-quarkus-cli:nativeImage -Dquarkus.package.type=native -x test --no-daemon 2>&1; then
+    echo ""
+    echo "[3/3] Verifying native executable..."
+
+    # Determine executable extension based on OS
+    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+        EXECUTABLE="build/avro-checks-quarkus-cli-0.0.1-RC1-runner.exe"
+    else
+        EXECUTABLE="build/avro-checks-quarkus-cli-0.0.1-RC1-runner"
+    fi
+
+    if [ -f "$EXECUTABLE" ]; then
+        echo "SUCCESS: Native executable created!"
+        echo "Location: $EXECUTABLE"
+        echo ""
+        echo "Testing executable..."
+        "$EXECUTABLE" --version
+        echo ""
+        echo "============================================"
+        echo "  Build Complete! (Native)"
+        echo "============================================"
+        echo ""
+        echo "Usage: $EXECUTABLE --help"
+        exit 0
+    fi
 fi
 
-if [ -f "$EXECUTABLE" ]; then
-    echo "SUCCESS: Native executable created!"
-    echo "Location: $EXECUTABLE"
+# Native build failed, try JAR mode
+echo ""
+echo "Native image build failed or not available."
+echo "Falling back to JAR mode (requires Java runtime)..."
+echo ""
+
+echo "[2b] Building JAR mode..."
+$JAVA_HOME/bin/java -cp ../gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain :avro-checks-quarkus-cli:quarkusBuild -x test --no-daemon
+
+JAR_FILE="build/quarkus-app/quarkus-run.jar"
+if [ -f "$JAR_FILE" ]; then
     echo ""
-    echo "Testing executable..."
-    "$EXECUTABLE" --version
+    echo "SUCCESS: JAR created!"
+    echo "Location: $JAR_FILE"
+    echo ""
+    echo "Testing JAR..."
+    $JAVA_HOME/bin/java -jar "$JAR_FILE" --version
+    echo ""
+    echo "============================================"
+    echo "  Build Complete! (JAR Mode)"
+    echo "============================================"
+    echo ""
+    echo "Usage: java -jar $JAR_FILE --help"
+    echo ""
+    echo "Note: This requires Java to be installed."
+    echo "To create a native binary without Java dependency,"
+    echo "additional GraalVM configuration is needed."
 else
-    echo "ERROR: Native executable not found!"
+    echo "ERROR: Neither native executable nor JAR found!"
     exit 1
 fi
-
-echo ""
-echo "============================================"
-echo "  Build Complete!"
-echo "============================================"
-echo ""
-echo "Usage: $EXECUTABLE --help"
