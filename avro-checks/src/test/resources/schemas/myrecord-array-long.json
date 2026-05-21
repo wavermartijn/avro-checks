@@ -1,0 +1,7 @@
+{
+  "type": "record",
+  "name": "myrecord",
+  "fields": [
+    {"name": "items", "type": {"type": "array", "items": "long"}}
+  ]
+}

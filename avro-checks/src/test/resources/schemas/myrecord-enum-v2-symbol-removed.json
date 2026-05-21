@@ -1,0 +1,7 @@
+{
+  "type": "record",
+  "name": "myrecord",
+  "fields": [
+    {"name": "status", "type": {"type": "enum", "name": "Status", "symbols": ["A", "B"]}}
+  ]
+}

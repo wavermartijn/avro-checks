@@ -4,7 +4,6 @@ import org.apache.avro.Schema;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -15,63 +14,30 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * https://github.com/confluentinc/schema-registry/blob/master/core/src/test/java/io/confluent/kafka/schemaregistry/avro/AvroCompatibilityTest.java
  *
  * Adapted to use com.waver.avro.AvroCompatibilityChecker and JUnit 5.
+ * Schema files live in src/test/resources/schemas/.
  */
 class AvroCompatibilityTest {
 
     // schema1 — single required string field f1
-    private final Schema schema1 = AvroChecks.parseSchema(
-        "{\"type\":\"record\","
-        + "\"name\":\"myrecord\","
-        + "\"fields\":"
-        + "[{\"type\":\"string\",\"name\":\"f1\"}]}");
+    private final Schema schema1 = SchemaLoader.load("myrecord-v1.json");
 
     // schema2 — f1 + f2 (string, default "foo")
-    private final Schema schema2 = AvroChecks.parseSchema(
-        "{\"type\":\"record\","
-        + "\"name\":\"myrecord\","
-        + "\"fields\":"
-        + "[{\"type\":\"string\",\"name\":\"f1\"},"
-        + " {\"type\":\"string\",\"name\":\"f2\", \"default\": \"foo\"}]}");
+    private final Schema schema2 = SchemaLoader.load("myrecord-v2-field-with-default.json");
 
     // schema3 — f1 + f2 (string, NO default)
-    private final Schema schema3 = AvroChecks.parseSchema(
-        "{\"type\":\"record\","
-        + "\"name\":\"myrecord\","
-        + "\"fields\":"
-        + "[{\"type\":\"string\",\"name\":\"f1\"},"
-        + " {\"type\":\"string\",\"name\":\"f2\"}]}");
+    private final Schema schema3 = SchemaLoader.load("myrecord-v3-field-no-default.json");
 
     // schema4 — f1 renamed to f1_new with alias f1
-    private final Schema schema4 = AvroChecks.parseSchema(
-        "{\"type\":\"record\","
-        + "\"name\":\"myrecord\","
-        + "\"fields\":"
-        + "[{\"type\":\"string\",\"name\":\"f1_new\", \"aliases\": [\"f1\"]}]}");
+    private final Schema schema4 = SchemaLoader.load("myrecord-v4-renamed-alias.json");
 
     // schema6 — f1 as union [null, string]
-    private final Schema schema6 = AvroChecks.parseSchema(
-        "{\"type\":\"record\","
-        + "\"name\":\"myrecord\","
-        + "\"fields\":"
-        + "[{\"type\":[\"null\", \"string\"],\"name\":\"f1\","
-        + " \"doc\":\"doc of f1\"}]}");
+    private final Schema schema6 = SchemaLoader.load("myrecord-v6-union-null-string.json");
 
     // schema7 — f1 as union [null, string, int]
-    private final Schema schema7 = AvroChecks.parseSchema(
-        "{\"type\":\"record\","
-        + "\"name\":\"myrecord\","
-        + "\"fields\":"
-        + "[{\"type\":[\"null\", \"string\", \"int\"],\"name\":\"f1\","
-        + " \"doc\":\"doc of f1\"}]}");
+    private final Schema schema7 = SchemaLoader.load("myrecord-v7-union-null-string-int.json");
 
     // schema8 — f1 + f2 (default "foo") + f3 (default "bar")
-    private final Schema schema8 = AvroChecks.parseSchema(
-        "{\"type\":\"record\","
-        + "\"name\":\"myrecord\","
-        + "\"fields\":"
-        + "[{\"type\":\"string\",\"name\":\"f1\"},"
-        + " {\"type\":\"string\",\"name\":\"f2\", \"default\": \"foo\"},"
-        + " {\"type\":\"string\",\"name\":\"f3\", \"default\": \"bar\"}]}");
+    private final Schema schema8 = SchemaLoader.load("myrecord-v8-three-fields-defaults.json");
 
     // -------------------------------------------------------------------------
     // BACKWARD
