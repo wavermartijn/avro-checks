@@ -23,13 +23,9 @@ if ! command -v native-image &> /dev/null; then
 fi
 
 echo "[1/3] Building avro-checks library..."
-cd ../avro-checks
-if [ -f ../gradlew ]; then
-    ../gradlew build publishToMavenLocal -x test
-else
-    echo "ERROR: Gradle wrapper not found"
-    exit 1
-fi
+cd ..
+# Use direct java invocation to avoid gradlew script issues
+$JAVA_HOME/bin/java -cp gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain :avro-checks:build :avro-checks:publishToMavenLocal -x test --no-daemon
 cd ../avro-checks-quarkus-cli
 
 echo ""
@@ -37,12 +33,8 @@ echo "[2/3] Building native image with Quarkus..."
 echo "This may take several minutes..."
 echo ""
 
-if [ -f ../gradlew ]; then
-    ../gradlew :avro-checks-quarkus-cli:nativeImage -Dquarkus.package.type=native -x test --no-daemon
-else
-    echo "ERROR: Gradle wrapper not found"
-    exit 1
-fi
+# Use direct java invocation to avoid gradlew script issues
+$JAVA_HOME/bin/java -cp ../gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain :avro-checks-quarkus-cli:nativeImage -Dquarkus.package.type=native -x test --no-daemon
 
 echo ""
 echo "[3/3] Verifying native executable..."
