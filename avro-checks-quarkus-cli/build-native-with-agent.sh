@@ -96,10 +96,10 @@ cd avro-checks-quarkus-cli
 if $JAVA_HOME/bin/java -cp ../gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain :avro-checks-quarkus-cli:nativeImage -Dquarkus.package.type=native -x test --no-daemon 2>&1; then
     echo ""
     echo "SUCCESS: Native executable created!"
-    echo "Location: build/avro-checks-quarkus-cli-0.0.1-RC1-runner"
+    echo "Location: build/avro-checks-quarkus-cli-runner"
     echo ""
     echo "Testing..."
-    ./build/avro-checks-quarkus-cli-0.0.1-RC1-runner --version
+    ./build/avro-checks-quarkus-cli-runner --version
     echo ""
     echo "============================================"
     echo "  Build Complete! (Native)"

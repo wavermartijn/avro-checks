@@ -46,9 +46,9 @@ if $JAVA_HOME/bin/java -cp ../gradle/wrapper/gradle-wrapper.jar org.gradle.wrapp
 
     # Determine executable extension based on OS
     if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
-        EXECUTABLE="build/avro-checks-quarkus-cli-0.0.1-RC1-runner.exe"
+        EXECUTABLE="build/avro-checks-quarkus-cli-runner.exe"
     else
-        EXECUTABLE="build/avro-checks-quarkus-cli-0.0.1-RC1-runner"
+        EXECUTABLE="build/avro-checks-quarkus-cli-runner"
     fi
 
     if [ -f "$EXECUTABLE" ]; then
