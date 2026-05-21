@@ -57,10 +57,17 @@ windsurf-project-2/
 │               ├── order-v1.json
 │               └── ... (12 schema files total)
 │
-└── avro-checks-cli/                        APPLICATION — fat-jar
+└── avro-checks-cli/                        APPLICATION — fat-jar (Gradle)
     ├── build.gradle.kts                    application plugin + fat-jar + slf4j-nop
     └── src/main/java/com/waver/avro/cli/
         └── Main.java                       CLI entry point
+
+└── avro-checks-quarkus-cli/                APPLICATION — native binary (Maven + Quarkus)
+    ├── pom.xml                             Quarkus + Picocli configuration
+    ├── build-native.bat                    Windows native build script
+    ├── build-native.sh                     Unix native build script
+    └── src/main/java/com/waver/avro/cli/
+        └── AvroChecksCommand.java          Picocli command with native support
 ```
 
 ---
@@ -103,6 +110,31 @@ List<MigrationAdvice> advice = AvroCompatibilityChecker.checkWithAdvice(newSchem
 for (MigrationAdvice a : advice) {
     System.out.println(a); // prints Issue + numbered steps
 }
+```
+
+### Builder API (Fluent)
+
+```java
+// Single schema check
+List<String> issues = AvroCompatibilityChecker.check()
+    .forCandidate(newSchema)
+    .withCompatibility(CompatibilityLevel.FULL)
+    .withOlderSchema(oldSchema)
+    .check();
+
+// Multiple schemas with varargs
+boolean ok = AvroCompatibilityChecker.check()
+    .forCandidate(newSchema)
+    .withCompatibility(CompatibilityLevel.BACKWARD)
+    .withHistory(v1, v2, v3)
+    .isCompatible();
+
+// With List
+List<MigrationAdvice> advice = AvroCompatibilityChecker.check()
+    .forCandidate(newSchema)
+    .withCompatibility(CompatibilityLevel.FULL_TRANSITIVE)
+    .withHistory(List.of(v1, v2))
+    .checkWithAdvice();
 ```
 
 ---
@@ -161,6 +193,28 @@ Advice  :
   1. Do NOT add 'currency' without a default in a single step.
   2. Step 1 -> In the new schema, add 'currency' WITH a default value ...
   ...
+```
+
+### Native CLI (GraalVM — No Java Required)
+
+Build a standalone native executable with GraalVM:
+
+**Windows:**
+```bash
+cd avro-checks-quarkus-cli
+build-native.bat
+```
+
+**Mac/Linux:**
+```bash
+cd avro-checks-quarkus-cli
+chmod +x build-native.sh
+./build-native.sh
+```
+
+Run without any Java installation:
+```bash
+./target/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new.json old.json --level FULL
 ```
 
 ---

@@ -18,8 +18,22 @@ All notable changes to this project are documented in this file.
 - `SchemaLoader` test utility to load schemas from resources by filename
 - `AvroCompatibilityTest` and `MigrationAdviceTest` refactored to use `SchemaLoader` (no inline JSON)
 - `AvroCheckerCoverageTest`: 26 new tests covering enums, arrays, maps, type promotion, record aliases, all compatibility levels, `CompatibilityResult`, and all `MigrationAdvisor` advice branches
-- JaCoCo 0.8.11 added with ≥ 80% instruction and branch coverage enforcement wired into the `check` task
-- 46 total tests, 0 failures
+
+### feat: builder API for compatibility checks
+- `CompatibilityCheckBuilder` — fluent API for constructing check requests
+- `AvroCompatibilityChecker.check()` — entry point returning a new builder
+- Methods: `forCandidate()`, `withCompatibility()`, `withOlderSchema()`, `withHistory()` (varargs and List)
+- Terminal methods: `check()`, `checkWithAdvice()`, `isCompatible()`
+- 11 new tests in `CompatibilityCheckBuilderTest`
+
+### feat: Quarkus native CLI (GraalVM)
+- New `avro-checks-quarkus-cli` module with Maven + Quarkus
+- Picocli-based command (`AvroChecksCommand`) with native compilation support
+- `build-native.bat` — Windows native build script
+- `build-native.sh` — Unix (Mac/Linux) native build script
+- Produces standalone executable requiring no JVM installation
+- Supports all compatibility levels with `--level` flag
+- Supports historical schemas with `--with-history` flag
 
 ### chore: specs and demo.bat
 - Added `specs/` directory with initial and advice specifications

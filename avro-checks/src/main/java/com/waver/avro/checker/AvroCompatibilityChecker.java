@@ -31,6 +31,24 @@ public final class AvroCompatibilityChecker {
     private AvroCompatibilityChecker() {}
 
     /**
+     * Returns a new {@link CompatibilityCheckBuilder} for fluent API configuration.
+     *
+     * <p>Example usage:
+     * <pre>{@code
+     * AvroCompatibilityChecker.check()
+     *     .forCandidate(newSchema)
+     *     .withCompatibility(CompatibilityLevel.FULL)
+     *     .withOlderSchema(oldSchema)
+     *     .check();
+     * }</pre>
+     *
+     * @return a new builder instance
+     */
+    public static CompatibilityCheckBuilder check() {
+        return new CompatibilityCheckBuilder();
+    }
+
+    /**
      * Returns an empty list when compatible, or a list of human-readable
      * incompatibility messages when not.
      *
