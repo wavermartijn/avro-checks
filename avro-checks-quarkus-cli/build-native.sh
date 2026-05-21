@@ -1,9 +1,16 @@
 #!/bin/bash
 set -e
 
+# Setup GraalVM environment
+export GRAALVM_HOME=/usr/lib/graalvm
+export JAVA_HOME=$GRAALVM_HOME
+export PATH=$GRAALVM_HOME/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 echo "============================================"
 echo "  avro-checks Native Image Builder (Unix)"
 echo "============================================"
+echo ""
+echo "JAVA_HOME: $JAVA_HOME"
 echo ""
 
 # Check for GraalVM
