@@ -66,8 +66,9 @@ quarkus {
     // Native image properties are configured via application.properties or system properties
 }
 
-// The quarkusBuild task with native property will be used by the build script
-tasks.register("buildNative") {
+// Custom task to build native image using Quarkus
+// Note: Quarkus plugin already provides 'buildNative' task, so we use a different name
+tasks.register("nativeImage") {
     group = "build"
     description = "Build native executable using Quarkus (requires GRAALVM_HOME to be set)"
     dependsOn("quarkusBuild")

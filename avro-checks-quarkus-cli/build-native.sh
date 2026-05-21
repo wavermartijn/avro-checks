@@ -38,7 +38,7 @@ echo "This may take several minutes..."
 echo ""
 
 if [ -f ../gradlew ]; then
-    ../gradlew :avro-checks-quarkus-cli:buildNative -Dquarkus.package.type=native -x test --no-daemon
+    ../gradlew :avro-checks-quarkus-cli:nativeImage -Dquarkus.package.type=native -x test --no-daemon
 else
     echo "ERROR: Gradle wrapper not found"
     exit 1
