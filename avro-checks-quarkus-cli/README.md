@@ -7,7 +7,7 @@ This module provides a native-compiled CLI that runs without requiring Java inst
 ## Prerequisites
 
 - [GraalVM](https://www.graalvm.org/downloads/) with native-image tool installed
-- Maven 3.9+ (or use the included Maven wrapper)
+- Gradle (uses project wrapper)
 
 ## Quick Start
 
@@ -28,16 +28,16 @@ chmod +x build-native.sh
 
 ```bash
 # Check compatibility (default: BACKWARD)
-./target/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new-schema.json old-schema.json
+./build/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new-schema.json old-schema.json
 
 # With specific compatibility level
-./target/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new.json old.json --level FULL
+./build/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new.json old.json --level FULL
 
 # With historical schemas (for transitive checks)
-./target/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new.json old.json --with-history older1.json,older2.json
+./build/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new.json old.json --with-history older1.json,older2.json
 
 # Help
-./target/avro-checks-quarkus-cli-0.0.1-RC1-runner --help
+./build/avro-checks-quarkus-cli-0.0.1-RC1-runner --help
 ```
 
 ## Features
@@ -52,15 +52,15 @@ chmod +x build-native.sh
 For development/testing without native compilation:
 
 ```bash
-mvn package
-java -jar target/quarkus-app/quarkus-run.jar --help
+../gradlew :avro-checks-quarkus-cli:quarkusBuild
+java -jar build/quarkus-app/quarkus-run.jar --help
 ```
 
 ## Project Structure
 
 ```
 avro-checks-quarkus-cli/
-├── pom.xml                          Maven configuration
+├── build.gradle.kts                 Gradle configuration with Quarkus plugin
 ├── build-native.bat                 Windows native build script
 ├── build-native.sh                  Unix native build script
 ├── src/

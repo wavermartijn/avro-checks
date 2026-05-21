@@ -214,7 +214,7 @@ chmod +x build-native.sh
 
 Run without any Java installation:
 ```bash
-./target/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new.json old.json --level FULL
+./build/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new.json old.json --level FULL
 ```
 
 ---

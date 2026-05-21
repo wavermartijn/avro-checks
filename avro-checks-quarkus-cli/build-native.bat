@@ -35,10 +35,11 @@ echo [2/3] Building native image with Quarkus...
 echo This may take several minutes...
 echo.
 
-if exist mvnw.cmd (
-    call mvnw.cmd package -Dnative -DskipTests
+if exist ..\gradlew.bat (
+    call ..\gradlew.bat :avro-checks-quarkus-cli:buildNative -x test
 ) else (
-    call mvn package -Dnative -DskipTests
+    echo ERROR: Gradle wrapper not found
+    exit /b 1
 )
 
 if %ERRORLEVEL% neq 0 (
@@ -48,12 +49,12 @@ if %ERRORLEVEL% neq 0 (
 
 echo.
 echo [3/3] Verifying native executable...
-if exist target\avro-checks-quarkus-cli-0.0.1-RC1-runner.exe (
+if exist build\avro-checks-quarkus-cli-0.0.1-RC1-runner.exe (
     echo SUCCESS: Native executable created!
-    echo Location: target\avro-checks-quarkus-cli-0.0.1-RC1-runner.exe
+    echo Location: build\avro-checks-quarkus-cli-0.0.1-RC1-runner.exe
     echo.
     echo Testing executable...
-    target\avro-checks-quarkus-cli-0.0.1-RC1-runner.exe --version
+    build\avro-checks-quarkus-cli-0.0.1-RC1-runner.exe --version
 ) else (
     echo ERROR: Native executable not found!
     exit /b 1
@@ -64,6 +65,6 @@ echo ============================================
 echo  Build Complete!
 echo ============================================
 echo.
-echo Usage: target\avro-checks-quarkus-cli-0.0.1-RC1-runner.exe --help
+echo Usage: build\avro-checks-quarkus-cli-0.0.1-RC1-runner.exe --help
 
 endlocal

@@ -30,10 +30,11 @@ echo "[2/3] Building native image with Quarkus..."
 echo "This may take several minutes..."
 echo ""
 
-if [ -f ./mvnw ]; then
-    ./mvnw package -Dnative -DskipTests
+if [ -f ../gradlew ]; then
+    ../gradlew :avro-checks-quarkus-cli:buildNative -x test
 else
-    mvn package -Dnative -DskipTests
+    echo "ERROR: Gradle wrapper not found"
+    exit 1
 fi
 
 echo ""
@@ -41,9 +42,9 @@ echo "[3/3] Verifying native executable..."
 
 # Determine executable extension based on OS
 if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
-    EXECUTABLE="target/avro-checks-quarkus-cli-0.0.1-RC1-runner.exe"
+    EXECUTABLE="build/avro-checks-quarkus-cli-0.0.1-RC1-runner.exe"
 else
-    EXECUTABLE="target/avro-checks-quarkus-cli-0.0.1-RC1-runner"
+    EXECUTABLE="build/avro-checks-quarkus-cli-0.0.1-RC1-runner"
 fi
 
 if [ -f "$EXECUTABLE" ]; then
