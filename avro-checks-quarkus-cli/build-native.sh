@@ -23,10 +23,11 @@ if ! command -v native-image &> /dev/null; then
 fi
 
 echo "[1/3] Building avro-checks library..."
-cd ..
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR/.."
 # Use direct java invocation to avoid gradlew script issues
 $JAVA_HOME/bin/java -cp gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain :avro-checks:build :avro-checks:publishToMavenLocal -x test --no-daemon
-cd ../avro-checks-quarkus-cli
+cd avro-checks-quarkus-cli
 
 echo ""
 echo "[2/3] Building native image with Quarkus..."
