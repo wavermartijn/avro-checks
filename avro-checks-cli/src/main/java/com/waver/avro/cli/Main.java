@@ -56,7 +56,7 @@ public class Main {
           1  Incompatible (migration advice is printed)
           2  Usage or parse error
 
-        Repository : https://github.com/waver/avro-checks
+        Repository : https://github.com/wavermartijn/avro-checks
         Owners     : Martijn van der Pauw
         """;
 

@@ -2,7 +2,7 @@
 
 > A self-contained Java 21 library and CLI tool for checking Avro schema compatibility.
 
-**Version:** `0.0.1-RC1` · **Owner:** Martijn van der Pauw · **Repo:** https://github.com/waver/avro-checks
+**Version:** `0.0.1-RC1` · **Owner:** Martijn van der Pauw · **Repo:** https://github.com/wavermartijn/avro-checks
 
 ---
 
