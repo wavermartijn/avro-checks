@@ -27,5 +27,58 @@
     "allPublicMethods": true,
     "allDeclaredFields": true,
     "allPublicFields": true
+  },
+  {
+    "name": "org.apache.avro.JsonProperties",
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "org.apache.avro.generic.GenericData",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "org.apache.avro.io.DatumReader",
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "org.apache.avro.io.DatumWriter",
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "org.codehaus.jackson.map.ObjectMapper",
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "org.codehaus.jackson.JsonNode",
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "java.util.LinkedHashMap",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "java.util.ArrayList",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "java.util.HashMap",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "java.util.Collections$UnmodifiableMap",
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "java.util.Collections$UnmodifiableList",
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "java.util.Collections$EmptyList",
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "java.util.Collections$EmptyMap",
+    "allDeclaredMethods": true
   }
 ]
