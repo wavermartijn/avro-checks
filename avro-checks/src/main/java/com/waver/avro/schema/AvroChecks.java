@@ -1,4 +1,4 @@
-package com.waver.avro;
+package com.waver.avro.schema;
 
 import org.apache.avro.Schema;
 

@@ -1,5 +1,7 @@
-package com.waver.avro;
+package com.waver.avro.checker;
 
+import com.waver.avro.advice.MigrationAdvice;
+import com.waver.avro.advice.MigrationAdvisor;
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Field;
 import org.apache.avro.Schema.Type;
@@ -7,7 +9,6 @@ import org.apache.avro.Schema.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Checks Avro schema compatibility between a new schema and one or more
@@ -33,10 +34,10 @@ public final class AvroCompatibilityChecker {
      * Returns an empty list when compatible, or a list of human-readable
      * incompatibility messages when not.
      *
-     * @param newSchema      the candidate schema (the new version)
-     * @param previousSchemas history ordered newest-first; only the first entry
+     * @param newSchema       the candidate schema (the new version)
+     * @param previousSchemas history ordered oldest-first; only the last entry
      *                        is used for non-transitive levels
-     * @param level          the compatibility level to enforce
+     * @param level           the compatibility level to enforce
      */
     public static List<String> check(Schema newSchema,
                                      List<Schema> previousSchemas,
@@ -262,7 +263,7 @@ public final class AvroCompatibilityChecker {
 
     /**
      * Returns true when reader and writer types are promotable/matching per
-     * the Avro spec (INT→LONG→FLOAT→DOUBLE promotion chain, etc.).
+     * the Avro spec (INT->LONG->FLOAT->DOUBLE promotion chain, etc.).
      */
     private static boolean typesMatch(Schema reader, Schema writer) {
         if (reader.getType() == writer.getType()) {

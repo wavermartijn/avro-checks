@@ -1,5 +1,8 @@
 package com.waver.avro;
 
+import com.waver.avro.advice.MigrationAdvice;
+import com.waver.avro.checker.AvroCompatibilityChecker;
+import com.waver.avro.checker.CompatibilityLevel;
 import org.apache.avro.Schema;
 import org.junit.jupiter.api.Test;
 
@@ -7,32 +10,17 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for migration advice output on incompatibility detection.
+ * Schema files live in src/test/resources/schemas/.
+ */
 class MigrationAdviceTest {
 
-    private final Schema schemaV1 = AvroChecks.parseSchema(
-        "{\"type\":\"record\",\"name\":\"Order\",\"namespace\":\"com.waver.avro\","
-        + "\"fields\":[{\"name\":\"id\",\"type\":\"string\"},"
-        + "{\"name\":\"amount\",\"type\":\"double\"}]}");
-
-    private final Schema schemaV2MandatoryField = AvroChecks.parseSchema(
-        "{\"type\":\"record\",\"name\":\"Order\",\"namespace\":\"com.waver.avro\","
-        + "\"fields\":[{\"name\":\"id\",\"type\":\"string\"},"
-        + "{\"name\":\"amount\",\"type\":\"double\"},"
-        + "{\"name\":\"currency\",\"type\":\"string\"}]}");
-
-    private final Schema schemaV2OptionalField = AvroChecks.parseSchema(
-        "{\"type\":\"record\",\"name\":\"Order\",\"namespace\":\"com.waver.avro\","
-        + "\"fields\":[{\"name\":\"id\",\"type\":\"string\"},"
-        + "{\"name\":\"amount\",\"type\":\"double\"},"
-        + "{\"name\":\"currency\",\"type\":\"string\",\"default\":\"USD\"}]}");
-
-    private final Schema schemaUnionV1 = AvroChecks.parseSchema(
-        "{\"type\":\"record\",\"name\":\"Item\","
-        + "\"fields\":[{\"name\":\"value\",\"type\":[\"null\",\"string\"]}]}");
-
-    private final Schema schemaPlainString = AvroChecks.parseSchema(
-        "{\"type\":\"record\",\"name\":\"Item\","
-        + "\"fields\":[{\"name\":\"value\",\"type\":\"string\"}]}");
+    private final Schema schemaV1             = SchemaLoader.load("order-v1.json");
+    private final Schema schemaV2MandatoryField = SchemaLoader.load("order-v2-mandatory-field.json");
+    private final Schema schemaV2OptionalField  = SchemaLoader.load("order-v2-optional-field.json");
+    private final Schema schemaUnionV1        = SchemaLoader.load("item-v1-union-null-string.json");
+    private final Schema schemaPlainString    = SchemaLoader.load("item-v2-plain-string.json");
 
     // ── BACKWARD: adding mandatory field ─────────────────────────────────────
 
