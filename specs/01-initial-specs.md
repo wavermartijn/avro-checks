@@ -31,9 +31,15 @@ windsurf-project-2/                    Gradle multi-project root (Gradle 8.5, Ko
 │   ├── build.gradle.kts               java-library plugin; api("org.apache.avro:avro:1.11.3")
 │   └── src/
 │       ├── main/java/com/waver/avro/
-│       │   ├── sub packages and classes here
+│       │   ├── schema/                AvroChecks (schema parsing facade)
+│       │   ├── checker/               AvroCompatibilityChecker, CompatibilityLevel, CompatibilityResult
+│       │   └── advice/                MigrationAdvice, MigrationAdvisor
 │       └── test/java/com/waver/avro/
-│           ├── tests matching the classes in main
+│           ├── SchemaLoader.java      test utility — loads schemas from test resources
+│           ├── AvroChecksTest.java
+│           ├── AvroCompatibilityTest.java
+│           ├── MigrationAdviceTest.java
+│           └── AvroCheckerCoverageTest.java
 └── avro-checks-cli/                   APPLICATION — ships as fat-jar or distZip
     ├── build.gradle.kts               application plugin; depends on :avro-checks
     └── src/main/java/com/waver/avro/cli/
