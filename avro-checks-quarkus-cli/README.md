@@ -50,16 +50,16 @@ This automatically falls back to JAR mode if native build fails.
 
 ```bash
 # Check compatibility (default: BACKWARD)
-./build/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new-schema.json old-schema.json
+./build/avro-checks-quarkus-cli-runner -f new-schema.json old-schema.json
 
 # With specific compatibility level
-./build/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new.json old.json --level FULL
+./build/avro-checks-quarkus-cli-runner -f new.json old.json --level FULL
 
 # With historical schemas (for transitive checks)
-./build/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new.json old.json --with-history older1.json,older2.json
+./build/avro-checks-quarkus-cli-runner -f new.json old.json --with-history older1.json,older2.json
 
 # Help
-./build/avro-checks-quarkus-cli-0.0.1-RC1-runner --help
+./build/avro-checks-quarkus-cli-runner --help
 ```
 
 ## Comparison
