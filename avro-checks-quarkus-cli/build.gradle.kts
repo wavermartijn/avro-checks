@@ -60,16 +60,24 @@ tasks.register<Exec>("nativeBuild") {
     }
 }
 
-// Simpler approach using Quarkus plugin
-tasks.register<Exec>("buildNative") {
-    group = "build"
-    description = "Build native executable using Quarkus"
+// Configure Quarkus native build
+quarkus {
+    setFinalName("avro-checks-quarkus-cli")
+    // Native image properties are configured via application.properties or system properties
+}
 
-    // Use Quarkus CLI or Gradle plugin
-    commandLine("./gradlew", "quarkusBuild", "-Dquarkus.package.type=native", "-x", "test")
+// Custom task to build native image using Quarkus
+// Note: Quarkus plugin already provides 'buildNative' task, so we use a different name
+tasks.register("nativeImage") {
+    group = "build"
+    description = "Build native executable using Quarkus (requires GRAALVM_HOME to be set)"
+    dependsOn("quarkusBuild")
 
     doFirst {
         println("Building native image with Quarkus...")
         println("This requires GraalVM to be installed and GRAALVM_HOME set")
+        if (System.getenv("GRAALVM_HOME") == null && System.getenv("JAVA_HOME") == null) {
+            throw GradleException("GRAALVM_HOME or JAVA_HOME environment variable must be set. Please install GraalVM.")
+        }
     }
 }
