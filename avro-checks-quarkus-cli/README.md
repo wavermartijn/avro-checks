@@ -6,12 +6,32 @@ This module provides a native-compiled CLI that runs without requiring Java inst
 
 ## Prerequisites
 
-- [GraalVM](https://www.graalvm.org/downloads/) with native-image tool installed
+- [GraalVM](https://www.graalvm.org/downloads/) JDK 21+ with `native-image` tool
 - Gradle (uses project wrapper)
 
 ## Quick Start
 
-### Build Native Image
+### Recommended: Tracing Agent Build
+
+Uses GraalVM's tracing agent to **automatically** generate all reflection configuration.
+This is the easiest and most reliable way to build the native image.
+
+**Mac/Linux:**
+```bash
+chmod +x build-native-with-agent.sh
+./build-native-with-agent.sh
+```
+
+**What it does:**
+1. Builds the JAR
+2. Runs the app with the GraalVM tracing agent to observe all reflection/resource usage
+3. Generates `reflect-config.json`, `resource-config.json`, etc.
+4. Rebuilds with the generated configuration
+5. Produces native binary
+
+### Alternative: Simple Build (May require manual config)
+
+If the tracing agent approach doesn't work, try the standard build:
 
 **Windows:**
 ```bash
@@ -24,30 +44,40 @@ chmod +x build-native.sh
 ./build-native.sh
 ```
 
+This automatically falls back to JAR mode if native build fails.
+
 ### Usage
 
 ```bash
 # Check compatibility (default: BACKWARD)
-./build/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new-schema.json old-schema.json
+./build/avro-checks-quarkus-cli-runner -f new-schema.json old-schema.json
 
 # With specific compatibility level
-./build/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new.json old.json --level FULL
+./build/avro-checks-quarkus-cli-runner -f new.json old.json --level FULL
 
 # With historical schemas (for transitive checks)
-./build/avro-checks-quarkus-cli-0.0.1-RC1-runner -f new.json old.json --with-history older1.json,older2.json
+./build/avro-checks-quarkus-cli-runner -f new.json old.json --with-history older1.json,older2.json
 
 # Help
-./build/avro-checks-quarkus-cli-0.0.1-RC1-runner --help
+./build/avro-checks-quarkus-cli-runner --help
 ```
+
+## Comparison
+
+| Method | Size | Java Required | Startup | Notes |
+|--------|------|---------------|---------|-------|
+| **Native Image (with agent)** | ~20-30MB | No | Instant | ✅ Recommended - auto-configures reflection |
+| **Native Image (simple)** | ~20-30MB | No | Instant | ⚠️ May fail - needs manual config |
+| **JAR Mode** | ~5MB JAR | Yes | Medium | ✅ Always works, requires Java runtime |
 
 ## Features
 
-- **Native compilation**: No JVM required - runs as standalone binary
+- **Standalone native binary**: No JVM required on target machine
 - **Fast startup**: Near-instant execution
 - **Small footprint**: Minimal memory usage
 - **Cross-platform**: Builds available for Windows, macOS, and Linux
 
-## Building JAR Mode (Non-Native)
+## Development Mode (JAR)
 
 For development/testing without native compilation:
 
@@ -61,8 +91,9 @@ java -jar build/quarkus-app/quarkus-run.jar --help
 ```
 avro-checks-quarkus-cli/
 ├── build.gradle.kts                 Gradle configuration with Quarkus plugin
-├── build-native.bat                 Windows native build script
-├── build-native.sh                  Unix native build script
+├── build-native.bat                 Windows native build script (with JAR fallback)
+├── build-native.sh                  Unix native build script (with JAR fallback)
+├── build-native-with-agent.sh       Tracing agent builder (recommended)
 ├── src/
 │   ├── main/
 │   │   ├── java/
