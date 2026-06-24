@@ -31,7 +31,7 @@ jobs:
         run: echo "VERSION=$(cat VERSION)" >> $GITHUB_OUTPUT
 
       - name: Build CLI fat JAR
-        run: ./gradlew :avro-checks-cli:jar -PincludeQuarkus=false
+        run: ./gradlew :avro-checks-cli:jar
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -83,11 +83,6 @@ jobs:
 
       - name: Make gradlew executable
         run: chmod +x gradlew
-
-      - name: Pin Gradle wrapper to 8.12.1 (required by Quarkus 3.8.1)
-        run: |
-          sed -i 's|gradle-9[^/]*/|gradle-8.12.1-bin.zip|' gradle/wrapper/gradle-wrapper.properties
-          sed -i 's|distributionUrl=.*|distributionUrl=https\\://services.gradle.org/distributions/gradle-8.12.1-bin.zip|' gradle/wrapper/gradle-wrapper.properties
 
       - name: Build Quarkus native binary (container build)
         run: |
