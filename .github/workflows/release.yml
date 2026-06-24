@@ -67,12 +67,16 @@ jobs:
     needs: release
     permissions:
       contents: write
-    container:
-      image: quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21
-      options: --user root
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up GraalVM 21 with native-image
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Read version
         id: version
@@ -82,7 +86,7 @@ jobs:
         run: |
           curl -sL https://services.gradle.org/distributions/gradle-8.12.1-bin.zip -o /tmp/gradle.zip
           unzip -q /tmp/gradle.zip -d /opt
-          ln -sf /opt/gradle-8.12.1/bin/gradle /usr/local/bin/gradle
+          echo "/opt/gradle-8.12.1/bin" >> $GITHUB_PATH
 
       - name: Build Quarkus native binary
         run: |
@@ -91,7 +95,7 @@ jobs:
             -Dquarkus.native.container-build=false \
             --no-daemon
         env:
-          GRADLE_OPTS: "-Xmx4g"
+          GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g"
 
       - name: Rename native binary
         run: |
