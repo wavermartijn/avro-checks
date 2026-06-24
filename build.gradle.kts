@@ -2,11 +2,13 @@ plugins {
     java
 }
 
+val projectVersion: String = rootProject.file("VERSION").readText().trim()
+
 subprojects {
     apply(plugin = "java")
 
     group = "com.waver.avro"
-    version = "1.0.0-SNAPSHOT"
+    version = projectVersion
 
     repositories {
         mavenCentral()
