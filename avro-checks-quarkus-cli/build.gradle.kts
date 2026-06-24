@@ -23,7 +23,7 @@ quarkus {
 
 tasks.processResources {
     filesMatching("application.properties") {
-        expand("project.version" to project.version)
+        expand("projectVersion" to project.version)
     }
 }
 
