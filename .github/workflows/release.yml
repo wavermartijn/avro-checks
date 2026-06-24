@@ -40,16 +40,66 @@ jobs:
           body: |
             ## avro-checks-cli ${{ steps.version.outputs.VERSION }}
 
-            A command-line tool for checking Avro schema compatibility.
+            Two artifacts are available:
 
-            ### Usage
+            | Artifact | Description |
+            |---|---|
+            | `avro-checks-cli-*.jar` | Fat JAR — requires Java 21+ |
+            | `avro-checks-quarkus-cli-*-runner` | Native binary for Linux x86_64 — no JVM needed |
+
+            ### Fat JAR usage
             ```
             java -jar avro-checks-cli-${{ steps.version.outputs.VERSION }}.jar --help
             java -jar avro-checks-cli-${{ steps.version.outputs.VERSION }}.jar <new-schema.json> <prev-schema.json> [LEVEL]
             java -jar avro-checks-cli-${{ steps.version.outputs.VERSION }}.jar -f new.avsc prev.avsc [LEVEL]
             ```
 
-            ### Requirements
-            - Java 21+
+            ### Native binary usage (Linux x86_64)
+            ```
+            chmod +x avro-checks-quarkus-cli-${{ steps.version.outputs.VERSION }}-runner
+            ./avro-checks-quarkus-cli-${{ steps.version.outputs.VERSION }}-runner --help
+            ```
           files: avro-checks-cli/build/libs/avro-checks-cli-${{ steps.version.outputs.VERSION }}.jar
+          fail_on_unmatched_files: true
+
+  native-release:
+    runs-on: ubuntu-latest
+    needs: release
+    permissions:
+      contents: write
+    container:
+      image: quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version
+        id: version
+        run: echo "VERSION=$(cat VERSION)" >> $GITHUB_OUTPUT
+
+      - name: Install Gradle 8.12.1
+        run: |
+          curl -sL https://services.gradle.org/distributions/gradle-8.12.1-bin.zip -o /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d /opt
+          ln -sf /opt/gradle-8.12.1/bin/gradle /usr/local/bin/gradle
+
+      - name: Build Quarkus native binary
+        run: |
+          gradle :avro-checks-quarkus-cli:quarkusBuild \
+            -Dquarkus.package.type=native \
+            -Dquarkus.native.container-build=false \
+            --no-daemon
+        env:
+          GRADLE_OPTS: "-Xmx4g"
+
+      - name: Rename native binary
+        run: |
+          mv avro-checks-quarkus-cli/build/avro-checks-quarkus-cli-runner \
+             avro-checks-quarkus-cli/build/avro-checks-quarkus-cli-${{ steps.version.outputs.VERSION }}-runner
+
+      - name: Upload native binary to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: avro-checks-quarkus-cli/build/avro-checks-quarkus-cli-${{ steps.version.outputs.VERSION }}-runner
           fail_on_unmatched_files: true

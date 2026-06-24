@@ -26,6 +26,12 @@ quarkus {
     setFinalName("avro-checks-quarkus-cli")
 }
 
+tasks.processResources {
+    filesMatching("application.properties") {
+        expand("project.version" to project.version)
+    }
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
