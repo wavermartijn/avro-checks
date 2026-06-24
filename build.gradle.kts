@@ -5,8 +5,6 @@ plugins {
 val projectVersion: String = rootProject.file("VERSION").readText().trim()
 
 subprojects {
-    apply(plugin = "java")
-
     group = "com.waver.avro"
     version = projectVersion
 
@@ -14,17 +12,21 @@ subprojects {
         mavenCentral()
     }
 
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(21)
+    if (!name.contains("quarkus")) {
+        apply(plugin = "java")
+
+        java {
+            toolchain {
+                languageVersion = JavaLanguageVersion.of(21)
+            }
         }
-    }
 
-    dependencies {
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    }
+        dependencies {
+            testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+        }
 
-    tasks.withType<Test> {
-        useJUnitPlatform()
+        tasks.withType<Test> {
+            useJUnitPlatform()
+        }
     }
 }
