@@ -89,12 +89,11 @@ jobs:
 
       - name: Build Quarkus native binary (container build)
         run: |
-          ./gradlew :avro-checks-quarkus-cli:build \
+          ./gradlew :avro-checks-quarkus-cli:quarkusBuild \
             -Dquarkus.native.enabled=true \
             -Dquarkus.native.container-build=true \
-            --no-daemon \
-            --info \
-            --stacktrace
+            -Dquarkus.package.jar.enabled=false \
+            --no-daemon
 
       - name: Rename native binary
         run: |
