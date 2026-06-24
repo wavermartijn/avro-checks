@@ -60,16 +60,3 @@ tasks.register<Exec>("nativeBuild") {
     }
 }
 
-// Simpler approach using Quarkus plugin
-tasks.register<Exec>("buildNative") {
-    group = "build"
-    description = "Build native executable using Quarkus"
-
-    // Use Quarkus CLI or Gradle plugin
-    commandLine("./gradlew", "quarkusBuild", "-Dquarkus.package.type=native", "-x", "test")
-
-    doFirst {
-        println("Building native image with Quarkus...")
-        println("This requires GraalVM to be installed and GRAALVM_HOME set")
-    }
-}
