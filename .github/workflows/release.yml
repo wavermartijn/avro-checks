@@ -81,6 +81,9 @@ jobs:
         id: version
         run: echo "VERSION=$(cat VERSION)" >> $GITHUB_OUTPUT
 
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
+
       - name: Make gradlew executable
         run: chmod +x gradlew
 
@@ -89,7 +92,8 @@ jobs:
           ./gradlew :avro-checks-quarkus-cli:build \
             -Dquarkus.native.enabled=true \
             -Dquarkus.native.container-build=true \
-            --no-daemon
+            --no-daemon \
+            --info
 
       - name: Rename native binary
         run: |
